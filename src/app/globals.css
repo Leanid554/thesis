@@ -7,3 +7,29 @@
     @apply font-geist;
   }
 }
+.toastify-progress {
+  position: relative;
+  overflow: hidden;
+}
+
+.toastify-progress::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.5);
+  animation: toastify-progress-bar 3s linear forwards;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+@keyframes toastify-progress-bar {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: 0%;
+  }
+}

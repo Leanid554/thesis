@@ -2,14 +2,39 @@
 import { useState } from "react";
 import Image from "next/image";
 import logo from "../../assets/icons/logo.svg";
+import Toastify from "toastify-js";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const showToast = () => {
+    Toastify({
+      text: "Logged in successfully!",
+      duration: 3000,
+      gravity: "top",
+      position: "right",
+      style: {
+        position: "fixed",
+        top: "1rem",
+        right: "1rem",
+        background: "#2bd12b",
+        color: "#fff",
+        padding: "12px 20px",
+        borderRadius: "8px",
+        fontSize: "14px",
+        maxWidth: "300px",
+        zIndex: "9999",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+      },
+      className: "toastify-progress",
+    }).showToast();
+  };
+
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Email:", email, "Password:", password);
+    showToast();
   };
 
   return (
@@ -42,7 +67,7 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="mt-1 block w-full px-4 py-2 border border-border-grey rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className="mt-1 text-sm block w-full px-4 py-2 border border-border-grey rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none "
             />
           </div>
 
@@ -55,7 +80,7 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="mt-1 block w-full px-4 py-2 border border-grey rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className="mt-1 text-sm block w-full px-4 py-2 border border-grey rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
           </div>
 
