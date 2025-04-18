@@ -17,10 +17,10 @@ export default function LoginPage() {
       <div className=" flex items-center justify-center sm:p-10 bg-white  ">
         <form
           onSubmit={handleLogin}
-          className=" container space-y-6 border border-grey rounded-xl shadow-xl p-5 sm:p-20 "
+          className=" container space-y-6 border border-grey rounded-xl shadow-xl p-5 sm:px-20 sm:pt-10 sm:pb-16 "
         >
           <div className="flex flex-col items-center">
-            <Image src={logo} alt="Logo" />
+            <Image className="pb-3" src={logo} alt="Logo" />
 
             <h1 className="text-2xl font-bold text-black text-center">
               Welcome back
