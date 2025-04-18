@@ -1,5 +1,7 @@
 "use client";
 import { useState } from "react";
+import Image from "next/image";
+import logo from "../../assets/icons/logo.svg";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -11,14 +13,28 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen">
-      <div className="w-full flex items-center justify-center p-10 bg-darkBlue">
-        <form onSubmit={handleLogin} className="w-full max-w-md space-y-6">
-          <h1 className="text-3xl font-bold text-blue-600 text-center">
-            Logowanie
-          </h1>
+    <div className="flex justify-center items-center min-h-screen">
+      <div className=" flex items-center justify-center sm:p-10 bg-white  ">
+        <form
+          onSubmit={handleLogin}
+          className=" container space-y-6 border border-grey rounded-xl shadow-xl p-5 sm:p-20 "
+        >
+          <div className="flex flex-col items-center">
+            <Image src={logo} alt="Logo" />
+
+            <h1 className="text-2xl font-bold text-black text-center">
+              Welcome back
+            </h1>
+            <p className="text-base  text-black text-center pt-1">
+              Glad to see you again!
+            </p>
+            <p className="text-base   text-black text-center">
+              Login to your account below
+            </p>
+          </div>
+
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-black w-80">
               Email
             </label>
             <input
@@ -26,28 +42,28 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className="mt-1 block w-full px-4 py-2 border border-border-grey rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Hasło
+            <label className="block text-sm font-medium text-black w-80">
+              Password
             </label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className="mt-1 block w-full px-4 py-2 border border-grey rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
           </div>
 
           <button
             type="submit"
-            className="w-full py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition"
+            className="w-full py-2 bg-main-blue text-white font-semibold duration-200 rounded-md hover:bg-hover-main-blue transition"
           >
-            Zaloguj się
+            Log in
           </button>
         </form>
       </div>
