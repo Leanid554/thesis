@@ -40,7 +40,7 @@ export default function SingupPage() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
+    <div className="flex justify-center items-center min-h-screen container">
       <div className="flex items-center justify-center sm:p-10 bg-white">
         <form
           onSubmit={handleLogin}
