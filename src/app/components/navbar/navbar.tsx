@@ -23,7 +23,7 @@ export default function Navbar() {
   return (
     <div className="bg-main-blue">
       <div className="container">
-        <div className="pt-12 pb-8 flex justify-between items-center">
+        <div className="pt-4 pb-4 flex justify-between items-center">
           <Image className="w-12" src={white_logo} alt="logo" />
           {/* desktop menu */}
           <div className="hidden md:flex text-white gap-12">
