@@ -21,7 +21,7 @@ export default function SearchBar() {
   };
 
   return (
-    <div className="w-full bg-white rounded-2xl border border-gray-200 p-4 shadow-md mt-5">
+    <div className="w-full  bg-white rounded-2xl border border-gray-200 p-4 shadow-sm mt-5">
       <div className="flex flex-wrap xl:flex-nowrap gap-4 mb-4">
         <div className="flex items-center w-full xl:w-1/3 bg-gray-50 rounded-full px-4 py-2">
           <FaUser className="text-gray-400 mr-2" />

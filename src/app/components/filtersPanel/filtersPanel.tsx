@@ -53,7 +53,7 @@ export default function FiltersPanel() {
   );
 
   return (
-    <div className=" flex flex-col pt-5">
+    <div className=" flex flex-col sticky top-5 pt-5">
       {/* mobile */}
       <button
         className="xl:hidden border border-gray-300 text-blue-700 font-bold rounded-full px-4 py-2"
