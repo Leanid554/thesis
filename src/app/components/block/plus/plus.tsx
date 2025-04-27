@@ -6,7 +6,7 @@ type PlusProps = {
 
 export default function Plus({ text }: PlusProps) {
   return (
-    <div className="text-sm rounded-full text-white bg-main-blue px-2 py-1">
+    <div className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
       {text}
     </div>
   );

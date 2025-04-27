@@ -27,9 +27,9 @@ export default function Pagination({
       <button
         onClick={handlePrev}
         disabled={currentPage === 1}
-        className="px-3 py-1 border rounded disabled:opacity-50"
+        className="px-3 py-1 border text-sm rounded disabled:border-gray-400 disabled:opacity-50"
       >
-        Назад
+        Prev
       </button>
 
       <div className="flex items-center gap-1">
@@ -49,9 +49,9 @@ export default function Pagination({
       <button
         onClick={handleNext}
         disabled={currentPage === totalPages}
-        className="px-3 py-1 border rounded disabled:opacity-50"
+        className="px-3 py-1 text-sm border rounded disabled:opacity-50"
       >
-        Вперёд
+        Next
       </button>
     </div>
   );

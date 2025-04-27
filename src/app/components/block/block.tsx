@@ -2,10 +2,10 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import img from "./../../../assets/img/nurseman.png";
-import iconStar from "./../../../assets/icons/star.svg";
 import iconBookMark from "./../../../assets/icons/bookmark_blue.svg";
 import iconBookMarkBorder from "./../../../assets/icons/bookmark_blue_border.svg";
 import Plus from "./plus/plus";
+import Reviews from "./reviews/reviews";
 
 export default function Block() {
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -26,10 +26,7 @@ export default function Block() {
               <h1 className="text-base">
                 <strong>Hotel:</strong> Start Way
               </h1>
-              <div className="flex gap-2 items-center">
-                <p className="text-base text-green-600">4.5</p>
-                <Image src={iconStar} alt="star" className="inline-block" />
-              </div>
+              <Reviews reviews="4.5" />
             </div>
 
             <div onClick={toggleBookmark} className="cursor-pointer">
