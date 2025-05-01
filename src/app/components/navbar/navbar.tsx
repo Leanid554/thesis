@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import white_logo from "../../../assets/icons/icon_white.svg";
+import Link from "next/link";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -24,7 +25,9 @@ export default function Navbar() {
     <div className="bg-main-blue">
       <div className="container">
         <div className="pt-4 pb-4 flex justify-between items-center">
-          <Image className="w-12" src={white_logo} alt="logo" />
+          <Link href={`/home`}>
+            <Image className="w-12" src={white_logo} alt="logo" />
+          </Link>
           {/* desktop menu */}
           <div className="hidden md:flex text-white gap-12">
             {navLinks.map((text, idx) => (
@@ -68,24 +71,27 @@ export default function Navbar() {
           </div>
 
           {/* profile button */}
+
           <div className="hidden md:block">
-            <button className="group inline-flex items-center gap-2 px-5 py-2 rounded-full border border-white text-white font-medium transition-all duration-200 hover:bg-white hover:text-main-blue hover:shadow-md focus:outline-none focus:ring-2 focus:ring-white/60">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-5 h-5 transition-transform duration-200 group-hover:scale-110"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={1.5}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a8.25 8.25 0 1115 0v.75H4.5v-.75z"
-                />
-              </svg>
-              <span>Profile</span>
-            </button>
+            <Link href={`/profile`}>
+              <button className="group inline-flex items-center gap-2 px-5 py-2 rounded-full border border-white text-white font-medium transition-all duration-200 hover:bg-white hover:text-main-blue hover:shadow-md focus:outline-none focus:ring-2 focus:ring-white/60">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-5 h-5 transition-transform duration-200 group-hover:scale-110"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={1.5}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a8.25 8.25 0 1115 0v.75H4.5v-.75z"
+                  />
+                </svg>
+                <span>Profile</span>
+              </button>
+            </Link>
           </div>
         </div>
       </div>
@@ -108,9 +114,11 @@ export default function Navbar() {
                   {text}
                 </span>
               ))}
-              <button className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white text-white text-sm font-medium transition hover:bg-white hover:text-main-blue">
-                <span>Profile</span>
-              </button>
+              <Link href={`/profile`}>
+                <button className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white text-white text-sm font-medium transition hover:bg-white hover:text-main-blue">
+                  <span>Profile</span>
+                </button>
+              </Link>
             </div>
           </div>
         </div>

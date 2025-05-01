@@ -1,17 +1,26 @@
 "use client";
 import React, { useState } from "react";
 import Navbar from "../components/navbar/navbar";
+import iconBookMark from "./../../assets/icons/bookmark_blue.svg";
+import iconBookMarkBorder from "./../../assets/icons/bookmark_blue_border.svg";
 import Image from "next/image";
 import img from "../../assets/img/nurseman.png";
+import img2 from "../../assets/img/3.jpg";
+import img3 from "../../assets/img/4.jpg";
 import Plus from "../components/block/plus/plus";
 import leftIcon from "../../assets/icons/blue_arrow_left_drop.svg";
 import rightIcon from "../../assets/icons/blue_arrow_right_drop.svg";
 import Reviews from "../components/block/reviews/reviews";
 
 export default function HotelDetailPage() {
-  const images = [img, img, img];
+  const images = [img, img2, img3];
   const [currentImage, setCurrentImage] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+
+  const toggleBookmark = () => {
+    setIsBookmarked(!isBookmarked);
+  };
 
   const prevImage = () => {
     setCurrentImage((prev) => (prev === 0 ? images.length - 1 : prev - 1));
@@ -33,7 +42,7 @@ export default function HotelDetailPage() {
           <Image
             src={images[currentImage]}
             alt={`Hotel image ${currentImage + 1}`}
-            className="w-full h-96 object-cover rounded-2xl cursor-pointer"
+            className="w-full h-60 xs:h-96 object-cover rounded-2xl cursor-pointer"
             onClick={toggleFullscreen}
           />
           <button
@@ -53,8 +62,17 @@ export default function HotelDetailPage() {
 
         <div className="rounded-2xl border border-gray-200 overflow-hidden mt-6 p-6 bg-white">
           <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold">Start Way Hotel</h1>
-            <Reviews reviews="4.5" />
+            <h1 className="text-xl  md:text-2xl font-bold">Start Way Hotel</h1>
+            <div className="flex items-center gap-6">
+              <Reviews reviews="4.5" />
+              <div onClick={toggleBookmark} className="cursor-pointer">
+                <Image
+                  src={isBookmarked ? iconBookMark : iconBookMarkBorder}
+                  alt="bookmark"
+                  className=" inline-block w-4"
+                />
+              </div>
+            </div>
           </div>
 
           <p className="text-gray-600 mt-4">
@@ -64,7 +82,7 @@ export default function HotelDetailPage() {
 
           {/* Amenities */}
           <div className="mt-6">
-            <h2 className="text-xl font-semibold mb-2">Amenities</h2>
+            <h2 className="text-lg md:text-xl font-semibold mb-2">Amenities</h2>
             <div className="flex gap-2 flex-wrap">
               {["WiFi", "WC", "Food", "Sea View"].map((amenity, idx) => (
                 <Plus key={idx} text={amenity} />
@@ -74,7 +92,9 @@ export default function HotelDetailPage() {
 
           {/* Reviews */}
           <div className="mt-8">
-            <h2 className="text-xl font-semibold mb-4">Guest Reviews</h2>
+            <h2 className="text-lg md:text-xl font-semibold mb-4">
+              Guest Reviews
+            </h2>
             <div className="space-y-4">
               {[
                 { name: "Alex", text: "Great hotel, clean and cozy!" },

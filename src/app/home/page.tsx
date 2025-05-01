@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Link from "next/link";
 import Navbar from "../components/navbar/navbar";
 import FiltersPanel from "../components/filtersPanel/filtersPanel";
 import Sidebar from "../components/sidebar/sidebar";
@@ -28,7 +29,9 @@ export default function Page() {
           <Sidebar />
           <div className="pt-4 flex flex-col gap-4">
             {visibleBlocks.map((block, index) => (
-              <Block key={index} />
+              <Link href={`/object/`} key={index}>
+                <Block key={index} />
+              </Link>
             ))}
           </div>
 
