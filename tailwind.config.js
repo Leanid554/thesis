@@ -10,7 +10,7 @@ module.exports = {
         grey: "#bdbdbd",
         "main-blue": "#105afa",
         "hover-main-blue": "#003cbd",
-        "border-grey": "#bdc2ca",
+        "border-grey": "#d5d5d5",
       },
       screens: {
         s: "375px",
