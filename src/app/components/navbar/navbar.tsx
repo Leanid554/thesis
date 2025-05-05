@@ -31,12 +31,13 @@ export default function Navbar() {
           {/* desktop menu */}
           <div className="hidden md:flex text-white gap-12">
             {navLinks.map((text, idx) => (
-              <h1
+              <Link
                 key={idx}
+                href={idx === 0 ? "/rent" : "/register"}
                 className="relative cursor-pointer after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-1 after:h-[2px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
               >
                 {text}
-              </h1>
+              </Link>
             ))}
           </div>
 
@@ -107,12 +108,13 @@ export default function Navbar() {
           >
             <div className="flex flex-col items-start gap-4 pb-6 pt-2 text-white px-4 container">
               {navLinks.map((text, idx) => (
-                <span
+                <Link
                   key={idx}
+                  href={idx === 0 ? "/rent" : "/register"}
                   className="text-base border-b border-white/30 pb-1 w-full"
                 >
                   {text}
-                </span>
+                </Link>
               ))}
               <Link href={`/profile`}>
                 <button className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white text-white text-sm font-medium transition hover:bg-white hover:text-main-blue">
