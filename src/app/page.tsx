@@ -1,95 +1,90 @@
+"use client";
+import React from "react";
+import Link from "next/link";
 import Image from "next/image";
-import styles from "./page.module.css";
+import img from "../assets/img/3.jpg";
+import Navbar from "./components/navbar/navbar";
 
-export default function Home() {
+const listings = [
+  {
+    id: 1,
+    title: "Cozy Apartment in the City Center",
+    description: "1-bedroom apartment, perfect for students or couples. Close to metro and shops.",
+    image: img,
+    price: "$850 / month",
+  },
+  {
+    id: 2,
+    title: "Modern Loft with Great View",
+    description: "Spacious loft with a skyline view, includes parking and gym access.",
+    image: img,
+    price: "$1200 / month",
+  },
+  {
+    id: 3,
+    title: "Charming Studio Near the Park",
+    description: "Small but cozy studio ideal for freelancers and solo travelers.",
+    image: img,
+    price: "$650 / month",
+  },
+];
+
+export default function HomePage() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="min-h-screen bg-gray-50">
+      <Navbar />
+      <main className="container mx-auto px-4 py-12">
+        {/* Hero Section */}
+        <section className="text-center mb-16">
+          <h1 className="text-4xl font-bold text-darkBlue mb-4">
+            Find Your Perfect Place to Rent
+          </h1>
+          <p className="text-lg text-gray-700 max-w-2xl mx-auto">
+            Our platform helps you rent or list properties quickly and easily. Transparent deals, verified listings, and real reviews.
+          </p>
+        </section>
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+        {/* Listings */}
+        <section>
+          <h2 className="text-2xl font-semibold text-darkBlue mb-8 text-center">
+            Latest Listings
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+            {listings.map((listing) => (
+              <Link href={`/object/${listing.id}`} key={listing.id}>
+                <div className="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden cursor-pointer">
+                  <Image
+                    src={listing.image}
+                    alt={listing.title}
+                    className="w-full h-48 object-cover"
+                    width={600}
+                    height={300}
+                  />
+                  <div className="p-4">
+                    <h3 className="text-xl font-semibold text-gray-800">{listing.title}</h3>
+                    <p className="text-gray-600 mt-2">{listing.description}</p>
+                    <p className="text-primary font-medium mt-4">{listing.price}</p>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* Call to Action Section */}
+        <section className="mt-24 bg-primary text-black py-12 px-6 rounded-xl shadow-md text-center">
+          <h2 className="text-3xl font-bold mb-4">Ready to get started?</h2>
+          <p className="text-lg mb-6">
+            Join our community and find or list your property today.
+          </p>
+          <Link
+            href="/register"
+            className="inline-block bg-white text-primary font-semibold px-6 py-3 rounded-full hover:bg-gray-100 transition"
           >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
+            Create an Account
+          </Link>
+        </section>
       </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   );
 }
