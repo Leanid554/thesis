@@ -25,7 +25,7 @@ export default function Navbar() {
     <div className="bg-main-blue">
       <div className="container">
         <div className="pt-4 pb-4 flex justify-between items-center">
-          <Link href={`/home`}>
+          <Link href={`/`}>
             <Image className="w-12" src={white_logo} alt="logo" />
           </Link>
           {/* desktop menu */}

@@ -11,6 +11,7 @@ import Plus from "../components/block/plus/plus";
 import leftIcon from "../../assets/icons/blue_arrow_left_drop.svg";
 import rightIcon from "../../assets/icons/blue_arrow_right_drop.svg";
 import Reviews from "../components/block/reviews/reviews";
+import Link from "next/link";
 
 export default function HotelDetailPage() {
   const images = [img, img2, img3];
@@ -37,12 +38,12 @@ export default function HotelDetailPage() {
   return (
     <div>
       <Navbar />
-      <div className="container mx-auto py-8 px-4 relative">
+      <div className="container py-8  relative">
         <div className="relative">
           <Image
             src={images[currentImage]}
             alt={`Hotel image ${currentImage + 1}`}
-            className="w-full h-60 xs:h-96 object-cover rounded-2xl cursor-pointer"
+            className="w-full h-60 xs:h-[600px]  rounded-2xl cursor-pointer"
             onClick={toggleFullscreen}
           />
           <button
@@ -111,9 +112,11 @@ export default function HotelDetailPage() {
             </div>
           </div>
           <div className="mt-8 flex justify-center">
-            <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-2xl transition">
-              Book Now
-            </button>
+            <Link href={`/booking`}>
+              <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-2xl transition">
+                Book Now
+              </button>
+            </Link>
           </div>
         </div>
       </div>
