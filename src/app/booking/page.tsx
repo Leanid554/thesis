@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import { loadStripe } from "@stripe/stripe-js";
+
 
 export default function BookingPage() {
   const [checkIn, setCheckIn] = useState("");
@@ -13,6 +15,8 @@ export default function BookingPage() {
     breakfast: false,
     pets: false,
   });
+  const stripePromise = loadStripe("pk_test_51RNX5oRpcspzFeghQDdMbGcjV3DTqv8Rej7b5MxM2QhF5P8uizXVZ8tUpmWIAxvp4JI99OCKRsbYliZRIyEyuWRO00wV7uU8ye"); // замени на свой publishable key
+
 
   const toggleOption = (key: keyof typeof options) => {
     setOptions((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -24,17 +28,22 @@ export default function BookingPage() {
     }
   };
 
-  const handleBooking = () => {
-    console.log({ checkIn, checkOut, guests, comment, options });
-    toast.success("Booking submitted successfully!", {
-      position: "top-right",
-      autoClose: 2500,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    });
+  const handleBooking = async () => {
+    const stripe = await stripePromise;
+  
+    if (!stripe) {
+      toast.error("Stripe failed to load.");
+      return;
+    }
+  
+    // ВРЕМЕННО: имитируем редирект на Stripe Checkout (можно заменить на реальную ссылку)
+    toast.success("Redirecting to payment...", { autoClose: 1500 });
+  
+    setTimeout(() => {
+      window.location.href = "/success"; // имитируем успешную оплату
+    }, 2000);
   };
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
