@@ -5,6 +5,7 @@ import { Dialog } from "@headlessui/react";
 import { Eye, EyeOff } from "lucide-react";
 import ListingCard from "../components/listingCard/listingCard";
 import FavoriteCard from "../components/favoriteCard/favoriteCard";
+import BookedCard from "../components/bookedCard/bookedCard";
 
 export default function ProfilePage() {
   const [showModal, setShowModal] = useState(false);
@@ -138,6 +139,18 @@ export default function ProfilePage() {
                 title={item.title}
                 location={item.location}
                 onRemove={() => console.log("Removed", item.title)}
+              />
+            ))}
+          </div>
+        </div>
+        <div>
+          <h3 className="text-xl font-bold text-black py-6">Favorites</h3>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {favorites.map((item, idx) => (
+              <BookedCard
+                key={idx}
+                title={item.title}
+                location={item.location}
               />
             ))}
           </div>
