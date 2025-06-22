@@ -8,8 +8,9 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "../components/context/AuthContext";
 import { jwtDecode } from "jwt-decode";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-// Тип, который должен соответствовать payload токена
 type DecodedToken = {
   firstName: string;
   lastName: string;
@@ -26,24 +27,6 @@ export default function SignupPage() {
   const router = useRouter();
   const { setUser } = useAuth();
 
-  const showToast = (text: string, isError = false) => {
-    Toastify({
-      text,
-      duration: 3000,
-      gravity: "top",
-      position: "right",
-      style: {
-        background: isError ? "#ef4444" : "#2bd12b",
-        color: "#fff",
-        padding: "12px 20px",
-        borderRadius: "8px",
-        fontSize: "14px",
-        maxWidth: "300px",
-        zIndex: "9999",
-        boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-      },
-    }).showToast();
-  };
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,32 +34,40 @@ export default function SignupPage() {
     const res = await fetch("/api/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ firstName, lastName, email, password }),
+      body: JSON.stringify({ name: firstName, surname: lastName, email, password }),
     });
 
     const data = await res.json();
 
     if (res.ok) {
       try {
-        const decoded: DecodedToken = jwtDecode(data.accessToken);
-
         const userData = {
-          firstName: decoded.firstName,
-          lastName: decoded.lastName,
-          email: decoded.email,
+          firstName: data.user.name,
+          lastName: data.user.surname,
+          email: data.user.email,
         };
+
 
         setUser(userData);
         localStorage.setItem("user", JSON.stringify(userData));
         localStorage.setItem("accessToken", data.accessToken);
 
-        showToast("Signed up successfully!");
-        router.push("/rent");
+        toast.success("Signed up successfully!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+        setTimeout(() => router.push("/"), 3000);
       } catch (err) {
-        showToast("Invalid token received", true);
+        toast.success("Invalid token received", {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     } else {
-      showToast(data.error || "Registration failed", true);
+      toast.error(data.error || "Registration failed", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     }
   };
 
@@ -156,6 +147,7 @@ export default function SignupPage() {
           </div>
         </form>
       </div>
+      <ToastContainer />
     </div>
   );
 }

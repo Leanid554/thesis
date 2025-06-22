@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import logo from "../../assets/icons/logo.svg";
-import Toastify from "toastify-js";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../components/context/AuthContext";
@@ -23,26 +24,6 @@ export default function LoginPage() {
   const router = useRouter();
   const { setUser } = useAuth();
 
-  const showToast = (text: string, isError = false) => {
-    Toastify({
-      text,
-      duration: 3000,
-      gravity: "top",
-      position: "right",
-      style: {
-        background: isError ? "#ef4444" : "#2bd12b",
-        color: "#fff",
-        padding: "12px 20px",
-        borderRadius: "8px",
-        fontSize: "14px",
-        maxWidth: "300px",
-        zIndex: "9999",
-        boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-      },
-      className: "toastify-progress",
-    }).showToast();
-  };
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -50,6 +31,7 @@ export default function LoginPage() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
+
     });
 
     const data = await res.json();
@@ -68,13 +50,23 @@ export default function LoginPage() {
         localStorage.setItem("user", JSON.stringify(userData));
         localStorage.setItem("accessToken", data.accessToken);
 
-        showToast("Logged in successfully!");
+        toast.success("Logged in successfully!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
         setTimeout(() => router.push("/"), 1000);
+
       } catch (err) {
-        showToast("Invalid token received", true);
+        toast.error("Invalid token received", {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
     } else {
-      showToast(data.error || "Login failed", true);
+      toast.error("Login failed", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     }
   };
 
@@ -131,6 +123,8 @@ export default function LoginPage() {
           </div>
         </form>
       </div>
+      <ToastContainer />
     </div>
+
   );
 }
