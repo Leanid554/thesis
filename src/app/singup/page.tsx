@@ -4,6 +4,8 @@ import Image from "next/image";
 import logo from "../../assets/icons/logo.svg";
 import Toastify from "toastify-js";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { useAuth } from "../components/context/AuthContext";
 
 export default function SignupPage() {
   const [email, setEmail] = useState("");
@@ -11,6 +13,7 @@ export default function SignupPage() {
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const router = useRouter();
+  const { setUser } = useAuth();
 
   const showToast = (text: string, isError = false) => {
     Toastify({
@@ -43,9 +46,10 @@ export default function SignupPage() {
     const data = await res.json();
 
     if (res.ok) {
-      // save access token
+      const userData = { name, email };
+      setUser(userData);
+      localStorage.setItem("user", JSON.stringify(userData));
       localStorage.setItem("accessToken", data.accessToken);
-      localStorage.setItem("user", JSON.stringify(data.user));
 
       showToast("Signed up successfully!");
       router.push("/rent");
@@ -63,12 +67,8 @@ export default function SignupPage() {
         >
           <div className="flex flex-col items-center">
             <Image className="pb-3" src={logo} alt="Logo" />
-            <h1 className="text-2xl font-bold text-black text-center">
-              Welcome!
-            </h1>
-            <p className="text-base text-black text-center pt-1">
-              Let’s get you set up.
-            </p>
+            <h1 className="text-2xl font-bold text-black text-center">Welcome!</h1>
+            <p className="text-base text-black text-center pt-1">Let’s get you set up.</p>
             <p className="text-base text-black text-center">
               Please fill in the details below to create your account.
             </p>
@@ -123,6 +123,14 @@ export default function SignupPage() {
           >
             Sign Up
           </button>
+          <div className="flex justify-center items-center text-sm">
+            <p className="flex gap-1">
+              Already have an
+              <Link href="/login">
+                <span className="text-blue-700">account</span>?
+              </Link>
+            </p>
+          </div>
         </form>
       </div>
     </div>

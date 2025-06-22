@@ -6,8 +6,10 @@ import FiltersPanel from "../components/filtersPanel/filtersPanel";
 import Sidebar from "../components/sidebar/sidebar";
 import Block from "../components/block/block";
 import Pagination from "../components/pagination/pagination";
+import PrivateRoute from "../components/context/PrivateRoute";
 
-export default function Page() {
+
+function ProtectedPageContent() {
   const [currentPage, setCurrentPage] = useState(1);
   const allBlocks = Array.from({ length: 10 }, (_, i) => i + 1);
 
@@ -45,5 +47,13 @@ export default function Page() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function Page() {
+  return (
+    <PrivateRoute>
+      <ProtectedPageContent />
+    </PrivateRoute>
   );
 }

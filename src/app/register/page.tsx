@@ -4,8 +4,10 @@ import React, { useState } from "react";
 import Navbar from "../components/navbar/navbar";
 import Image from "next/image";
 import uploadIcon from "../../assets/icons/upload.svg";
+import PrivateRoute from "../components/context/PrivateRoute";
 
-export default function HotelForm() {
+
+function HotelForm() {
   const [name, setName] = useState("");
   const [number, setNumber] = useState("");
   const [location, setLocation] = useState("");
@@ -34,7 +36,6 @@ export default function HotelForm() {
           location,
           info,
           type,
-          // позже можно добавить base64 или multipart загрузку файлов
         }),
       });
 
@@ -56,7 +57,6 @@ export default function HotelForm() {
       <div className="max-w-[648px] mx-auto px-4 md:px-0 pt-6 pb-10 flex flex-col gap-6">
         <h1 className="text-center text-xl font-bold">Register your object</h1>
 
-        {/* name */}
         <div className="focus-within:text-blue-700">
           <p className="pb-2 text-base">Name of object</p>
           <input
@@ -68,7 +68,6 @@ export default function HotelForm() {
           />
         </div>
 
-        {/* number */}
         <div className="focus-within:text-blue-700">
           <p className="pb-2 text-base">Number</p>
           <input
@@ -80,7 +79,6 @@ export default function HotelForm() {
           />
         </div>
 
-        {/* location */}
         <div className="focus-within:text-blue-700">
           <p className="pb-2 text-base">Location</p>
           <input
@@ -92,7 +90,6 @@ export default function HotelForm() {
           />
         </div>
 
-        {/* info */}
         <div className="focus-within:text-blue-700">
           <p className="pb-2 text-base">Info</p>
           <textarea
@@ -103,7 +100,6 @@ export default function HotelForm() {
           />
         </div>
 
-        {/* type */}
         <div className="focus-within:text-blue-700 relative w-full">
           <p className="pb-2 text-base">Select type of object</p>
           <select
@@ -117,7 +113,6 @@ export default function HotelForm() {
           </select>
         </div>
 
-        {/* upload */}
         <label
           htmlFor="fileInput"
           className="w-full border-2 border-dashed border-blue-500 rounded-lg py-8 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-blue-50 transition"
@@ -157,7 +152,6 @@ export default function HotelForm() {
           />
         </label>
 
-        {/* submit */}
         <button
           onClick={handleSubmit}
           className="bg-blue-600 hover:bg-blue-800 text-white text-base px-14 py-3 rounded-full"
@@ -166,5 +160,13 @@ export default function HotelForm() {
         </button>
       </div>
     </div>
+  );
+}
+
+export default function HotelFormPage() {
+  return (
+    <PrivateRoute>
+      <HotelForm />
+    </PrivateRoute>
   );
 }
