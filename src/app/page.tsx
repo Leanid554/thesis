@@ -4,6 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import img from "../assets/img/3.jpg";
 import Navbar from "./components/navbar/navbar";
+import { useAuth } from "./components/context/AuthContext";
+
 
 const listings = [
   {
@@ -30,6 +32,7 @@ const listings = [
 ];
 
 export default function HomePage() {
+  const { user } = useAuth();
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
@@ -72,18 +75,20 @@ export default function HomePage() {
         </section>
 
         {/* Call to Action Section */}
-        <section className="mt-24 bg-primary text-black py-12 px-6 rounded-xl shadow-md text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to get started?</h2>
-          <p className="text-lg mb-6">
-            Join our community and find or list your property today.
-          </p>
-          <Link
-            href="/register"
-            className="inline-block bg-white text-primary font-semibold px-6 py-3 rounded-full hover:bg-gray-100 transition"
-          >
-            Create an Account
-          </Link>
-        </section>
+        {!user && (
+          <section className="mt-24 bg-primary text-black py-12 px-6 rounded-xl shadow-md text-center">
+            <h2 className="text-3xl font-bold mb-4">Ready to get started?</h2>
+            <p className="text-lg mb-6">
+              Join our community and find or list your property today.
+            </p>
+            <Link
+              href="/signup"
+              className="inline-block bg-white text-primary font-semibold px-6 py-3 rounded-full hover:bg-gray-100 transition"
+            >
+              Create an Account
+            </Link>
+          </section>
+        )}
       </main>
     </div>
   );
