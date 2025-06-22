@@ -2,9 +2,11 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 
 type User = {
-    name: string;
+    firstName: string;
+    lastName: string;
     email: string;
 };
+
 
 type AuthContextType = {
     user: User | null;

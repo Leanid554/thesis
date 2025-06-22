@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import Image from "next/image";
 import logo from "../../assets/icons/logo.svg";
@@ -6,6 +7,15 @@ import Toastify from "toastify-js";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../components/context/AuthContext";
+import { jwtDecode } from "jwt-decode";
+
+type DecodedToken = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  exp: number;
+  iat: number;
+};
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -13,14 +23,14 @@ export default function LoginPage() {
   const router = useRouter();
   const { setUser } = useAuth();
 
-  const showToast = () => {
+  const showToast = (text: string, isError = false) => {
     Toastify({
-      text: "Logged in successfully!",
+      text,
       duration: 3000,
       gravity: "top",
       position: "right",
       style: {
-        background: "#2bd12b",
+        background: isError ? "#ef4444" : "#2bd12b",
         color: "#fff",
         padding: "12px 20px",
         borderRadius: "8px",
@@ -33,17 +43,39 @@ export default function LoginPage() {
     }).showToast();
   };
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const userData = { name: "Unknown", email }; // можно заменить на данные с сервера
-    setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData));
+    const res = await fetch("/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
 
-    showToast();
-    setTimeout(() => {
-      router.push("/");
-    }, 1000);
+    const data = await res.json();
+
+    if (res.ok) {
+      try {
+        const decoded: DecodedToken = jwtDecode(data.accessToken);
+
+        const userData = {
+          firstName: decoded.firstName,
+          lastName: decoded.lastName,
+          email: decoded.email,
+        };
+
+        setUser(userData);
+        localStorage.setItem("user", JSON.stringify(userData));
+        localStorage.setItem("accessToken", data.accessToken);
+
+        showToast("Logged in successfully!");
+        setTimeout(() => router.push("/"), 1000);
+      } catch (err) {
+        showToast("Invalid token received", true);
+      }
+    } else {
+      showToast(data.error || "Login failed", true);
+    }
   };
 
   return (

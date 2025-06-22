@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import Image from "next/image";
 import logo from "../../assets/icons/logo.svg";
@@ -6,12 +7,22 @@ import Toastify from "toastify-js";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "../components/context/AuthContext";
+import { jwtDecode } from "jwt-decode";
+
+// Тип, который должен соответствовать payload токена
+type DecodedToken = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  exp: number;
+  iat: number;
+};
 
 export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [surname, setSurname] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const router = useRouter();
   const { setUser } = useAuth();
 
@@ -40,19 +51,30 @@ export default function SignupPage() {
     const res = await fetch("/api/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, surname, email, password }),
+      body: JSON.stringify({ firstName, lastName, email, password }),
     });
 
     const data = await res.json();
 
     if (res.ok) {
-      const userData = { name, email };
-      setUser(userData);
-      localStorage.setItem("user", JSON.stringify(userData));
-      localStorage.setItem("accessToken", data.accessToken);
+      try {
+        const decoded: DecodedToken = jwtDecode(data.accessToken);
 
-      showToast("Signed up successfully!");
-      router.push("/rent");
+        const userData = {
+          firstName: decoded.firstName,
+          lastName: decoded.lastName,
+          email: decoded.email,
+        };
+
+        setUser(userData);
+        localStorage.setItem("user", JSON.stringify(userData));
+        localStorage.setItem("accessToken", data.accessToken);
+
+        showToast("Signed up successfully!");
+        router.push("/rent");
+      } catch (err) {
+        showToast("Invalid token received", true);
+      }
     } else {
       showToast(data.error || "Registration failed", true);
     }
@@ -76,21 +98,21 @@ export default function SignupPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
             <div>
-              <label className="block text-sm font-medium text-black w-60">Name</label>
+              <label className="block text-sm font-medium text-black w-60">First Name</label>
               <input
                 type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
                 required
                 className="mt-1 text-sm block w-full px-4 py-2 border border-border-grey rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-black w-60">Surname</label>
+              <label className="block text-sm font-medium text-black w-60">Last Name</label>
               <input
                 type="text"
-                value={surname}
-                onChange={(e) => setSurname(e.target.value)}
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
                 required
                 className="mt-1 text-sm block w-full px-4 py-2 border border-grey rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
               />
@@ -123,6 +145,7 @@ export default function SignupPage() {
           >
             Sign Up
           </button>
+
           <div className="flex justify-center items-center text-sm">
             <p className="flex gap-1">
               Already have an
