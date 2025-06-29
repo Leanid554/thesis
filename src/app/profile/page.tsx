@@ -9,9 +9,10 @@ import BookedCard from "../components/bookedCard/bookedCard";
 import { useAuth } from "../components/context/AuthContext";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import PrivateRoute from "../components/context/PrivateRoute";
 
 
-export default function ProfilePage() {
+export function ProtectedPageContent() {
   const [showModal, setShowModal] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { user, setUser } = useAuth();
@@ -237,5 +238,13 @@ function EditModal({
       </div>
     </Dialog>
 
+  );
+
+}
+export default function Page() {
+  return (
+    <PrivateRoute>
+      <ProtectedPageContent />
+    </PrivateRoute>
   );
 }
