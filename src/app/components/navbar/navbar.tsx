@@ -8,6 +8,7 @@ import { Dialog } from "@headlessui/react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../context/AuthContext";
 
+
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -17,6 +18,7 @@ export default function Navbar() {
   const router = useRouter();
 
   const navLinks = ["Rent a place", "Register your object"];
+   const { user } = useAuth();
 
   useEffect(() => {
     if (menuOpen) {
@@ -39,81 +41,86 @@ export default function Navbar() {
   return (
     <div className="bg-main-blue">
       <div className="container">
-        <div className="pt-4 pb-4 flex justify-between items-center">
-          <Link href={`/`}>
-            <Image className="w-12" src={white_logo} alt="logo" />
-          </Link>
-          {/* desktop menu */}
-          <div className="hidden md:flex text-white gap-12">
-            {navLinks.map((text, idx) => (
-              <Link
-                key={idx}
-                href={idx === 0 ? "/rent" : "/register"}
-                className="relative cursor-pointer after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-1 after:h-[2px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
-              >
-                {text}
-              </Link>
-            ))}
-          </div>
-
-          {/* burger icon */}
-          <div className="md:hidden">
-            <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="text-white focus:outline-none"
-            >
-              <svg
-                className="w-7 h-7"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2}
-                viewBox="0 0 24 24"
-              >
-                {menuOpen ? (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                ) : (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                )}
-              </svg>
-            </button>
-          </div>
-
-          {/* profile button */}
-
-          <div className="hidden md:flex gap-6 items-center">
-            <Link href={`/profile`}>
-              <button className="group inline-flex items-center gap-2 px-5 py-2 rounded-full border border-white text-white font-medium transition-all duration-200 hover:bg-white hover:text-main-blue hover:shadow-md focus:outline-none focus:ring-2 focus:ring-white/60">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-5 h-5 transition-transform duration-200 group-hover:scale-110"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={1.5}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a8.25 8.25 0 1115 0v.75H4.5v-.75z"
-                  />
-                </svg>
-                <span>Profile</span>
-              </button>
+          <div className="pt-4 pb-4 flex justify-between items-center">
+            <Link href={`/`}>
+              <Image className="w-12" src={white_logo} alt="logo" />
             </Link>
-            <button onClick={() => setIsOpen(true)} >
-              <Image className="w-6" src={logout} alt="log out">
-              </Image>
-            </button>
+            {/* desktop menu */}
+            <div className="hidden md:flex text-white gap-12">
+              {user && user.role === "user" && (
+
+                <>
+              {navLinks.map((text, idx) => (
+                <Link
+                  key={idx}
+                  href={idx === 0 ? "/rent" : "/register"}
+                  className="relative cursor-pointer after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-1 after:h-[2px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
+                >
+                  {text}
+                </Link>
+              ))}
+              </>
+            )}
+            </div>
+
+            {/* burger icon */}
+            <div className="md:hidden">
+              <button
+                onClick={() => setMenuOpen(!menuOpen)}
+                className="text-white focus:outline-none"
+              >
+                <svg
+                  className="w-7 h-7"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  viewBox="0 0 24 24"
+                >
+                  {menuOpen ? (
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  ) : (
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M4 6h16M4 12h16M4 18h16"
+                    />
+                  )}
+                </svg>
+              </button>
+            </div>
+
+            {/* profile button */}
+
+            <div className="hidden md:flex gap-6 items-center">
+              <Link href={`/profile`}>
+                <button className="group inline-flex items-center gap-2 px-5 py-2 rounded-full border border-white text-white font-medium transition-all duration-200 hover:bg-white hover:text-main-blue hover:shadow-md focus:outline-none focus:ring-2 focus:ring-white/60">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-5 h-5 transition-transform duration-200 group-hover:scale-110"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a8.25 8.25 0 1115 0v.75H4.5v-.75z"
+                    />
+                  </svg>
+                  <span>Profile</span>
+                </button>
+              </Link>
+              <button onClick={() => setIsOpen(true)} >
+                <Image className="w-6" src={logout} alt="log out">
+                </Image>
+              </button>
+            </div>
           </div>
-        </div>
       </div>
       {/* mobile menu */}
       {isVisible && (

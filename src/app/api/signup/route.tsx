@@ -6,7 +6,7 @@ import { serialize } from 'cookie';
 
 export async function POST(req: Request) {
   try {
-    const { name, surname, email, password } = await req.json();
+    const { name, surname, email, password, role } = await req.json();
 
     if (!email || !password || !name || !surname) {
       return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
@@ -20,15 +20,25 @@ export async function POST(req: Request) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const result = await pool.query(
-      'INSERT INTO users (name, surname, email, password) VALUES ($1, $2, $3, $4) RETURNING id, name, surname, email',
-      [name, surname, email, hashedPassword]
+      'INSERT INTO users (name, surname, email, password, role) VALUES ($1, $2, $3, $4, $5) RETURNING id, name, surname, email, role',
+      [name, surname, email, hashedPassword, role || 'user']
     );
 
     const user = result.rows[0];
 
     // tokens
-    const accessToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET!, { expiresIn: '15m' });
-    const refreshToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET!, { expiresIn: '7d' });
+    const accessToken = jwt.sign(
+      {
+        id: user.id,
+        role: user.role,
+        firstName: user.name,    
+        lastName: user.surname,    
+        email: user.email
+      },
+      process.env.JWT_SECRET!,
+      { expiresIn: '15m' }
+    );
+    const refreshToken = jwt.sign({ id: user.id , role: user.role }, process.env.JWT_SECRET!, { expiresIn: '7d' });
 
     // coockie refresh
     const response = NextResponse.json({ user, accessToken }, { status: 201 });

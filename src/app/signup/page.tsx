@@ -17,6 +17,7 @@ type DecodedToken = {
   email: string;
   exp: number;
   iat: number;
+  role: string;
 };
 
 export default function SignupPage() {
@@ -24,6 +25,7 @@ export default function SignupPage() {
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [role, setRole] = useState("");
   const router = useRouter();
   const { setUser } = useAuth();
 
@@ -34,10 +36,11 @@ export default function SignupPage() {
     const res = await fetch("/api/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: firstName, surname: lastName, email, password }),
+      body: JSON.stringify({ name: firstName, surname: lastName, email, password, role }),
     });
 
     const data = await res.json();
+    console.log(role);
 
     if (res.ok) {
       try {
@@ -45,6 +48,7 @@ export default function SignupPage() {
           firstName: data.user.name,
           lastName: data.user.surname,
           email: data.user.email,
+          role: data.user.role,
         };
 
 

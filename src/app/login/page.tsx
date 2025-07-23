@@ -16,11 +16,13 @@ type DecodedToken = {
   email: string;
   exp: number;
   iat: number;
+  role: string;
 };
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("");
   const router = useRouter();
   const { setUser } = useAuth();
 
@@ -44,6 +46,7 @@ export default function LoginPage() {
           firstName: decoded.firstName,
           lastName: decoded.lastName,
           email: decoded.email,
+          role: decoded.role,
         };
 
         setUser(userData);

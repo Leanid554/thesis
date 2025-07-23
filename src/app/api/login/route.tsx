@@ -11,7 +11,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Missing email or password' }, { status: 400 });
         }
 
-        const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+        const result = await pool.query(  'SELECT id, name, surname, email, role, password FROM users WHERE email = $1', [email]);
         const user = result.rows[0];
 
         if (!user) {
@@ -26,6 +26,7 @@ export async function POST(req: Request) {
         const accessToken = jwt.sign(
             {
                 id: user.id,
+                role: user.role,
                 firstName: user.name,
                 lastName: user.surname,
                 email: user.email,
@@ -33,6 +34,7 @@ export async function POST(req: Request) {
             process.env.JWT_SECRET!,
             { expiresIn: '15m' }
         );
+
 
         return NextResponse.json({ accessToken }, { status: 200 });
     } catch (error) {

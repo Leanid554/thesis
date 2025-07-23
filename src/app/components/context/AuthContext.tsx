@@ -5,6 +5,7 @@ type User = {
     firstName: string;
     lastName: string;
     email: string;
+    role: string; 
 };
 
 
@@ -17,7 +18,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
-    console.log("Current user:", user);
+  
 
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
