@@ -61,6 +61,14 @@ export default function Navbar() {
               ))}
               </>
             )}
+            { user && user.role === "admin" && (
+              <Link
+                  href={`/changemode`}
+                  className="relative cursor-pointer after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-1 after:h-[2px] after:w-0 after:bg-white after:transition-all after:duration-300 hover:after:w-full"
+                >
+                Change Mode
+              </Link>
+            )}
             </div>
 
             {/* burger icon */}
@@ -115,10 +123,13 @@ export default function Navbar() {
                   <span>Profile</span>
                 </button>
               </Link>
-              <button onClick={() => setIsOpen(true)} >
-                <Image className="w-6" src={logout} alt="log out">
-                </Image>
-              </button>
+              { user && (user.role === "admin" || user.role === "user")  && (
+                <button onClick={() => setIsOpen(true)} >
+                  <Image className="w-6" src={logout} alt="log out">
+                  </Image>
+                </button>
+              )} 
+         
             </div>
           </div>
       </div>
