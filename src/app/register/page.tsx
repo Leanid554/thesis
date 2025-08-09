@@ -5,7 +5,9 @@ import Navbar from "../components/navbar/navbar";
 import Image from "next/image";
 import uploadIcon from "../../assets/icons/upload.svg";
 import PrivateRoute from "../components/context/PrivateRoute";
-
+import { TagsInput } from "@skeletonlabs/skeleton-react";
+import { toast, ToastContainer } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 function HotelForm() {
   const [name, setName] = useState("");
@@ -14,6 +16,8 @@ function HotelForm() {
   const [info, setInfo] = useState("");
   const [type, setType] = useState("room");
   const [files, setFiles] = useState<File[]>([]);
+  const [flavors, setFlavors] = useState<string[]>([]);
+  const router = useRouter();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -25,31 +29,34 @@ function HotelForm() {
     setFiles((prev) => prev.filter((_, index) => index !== indexToRemove));
   };
 
-  const handleSubmit = async () => {
-    try {
-      const res = await fetch("/api/objects", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name,
-          number,
-          location,
-          info,
-          type,
-        }),
-      });
+const handleSubmit = async () => {
+  try {
+    const form = new FormData();
+    form.append('name', name);
+    form.append('number', number);
+    form.append('location', location);
+    form.append('info', info);
+    form.append('type', type);
+    form.append('flavors', JSON.stringify(flavors));
+    files.forEach((f) => form.append('files', f));
+
+    const res = await fetch('/api/objects', {
+      method: 'POST',
+      body: form,
+    });
 
       const data = await res.json();
       if (!res.ok) {
-        alert(data.error || "Something went wrong");
+        toast.error(data.error || 'Something went wrong');
         return;
       }
-
-      alert("Object registered successfully!");
-    } catch (error) {
-      alert("Network error");
+      toast.success('Object registered successfully!');
+      setTimeout(() => router.push("/"), 3000);
+    } catch (e) {
+      toast.warn('Network error');
     }
   };
+
 
   return (
     <div>
@@ -99,6 +106,19 @@ function HotelForm() {
             className="w-full h-32 px-4 pt-4 border rounded-xl"
           />
         </div>
+        <div className="focus-within:text-blue-700">
+          <p className=" pb-2 text-base">Tag</p>
+          <TagsInput
+            name="example"
+            inputBase="bg-white border rounded-lg py-3 px-2 w-full "
+            value={flavors}
+            onValueChange={(e) => setFlavors(e.value)}
+            placeholder="Add Tag..."
+            base="p-0"
+            tagBase="border border-blue-600 px-2 flex gap-2 rounded-full text-blue-600 "
+            tagListClasses="pt-4"
+          />
+        </div>
 
         <div className="focus-within:text-blue-700 relative w-full">
           <p className="pb-2 text-base">Select type of object</p>
@@ -119,11 +139,17 @@ function HotelForm() {
         >
           {files.length === 0 ? (
             <>
-              <Image src={uploadIcon} alt="upload icon" className="w-10 h-10 mb-4" />
+              <Image
+                src={uploadIcon}
+                alt="upload icon"
+                className="w-10 h-10 mb-4"
+              />
               <p className="text-purple-main text-lg font-bold">
                 Upload photo <span className="font-normal">(general)</span>
               </p>
-              <p className="text-purple-main text-lg mt-1">lub upuść plik tutaj</p>
+              <p className="text-purple-main text-lg mt-1">
+                lub upuść plik tutaj
+              </p>
             </>
           ) : (
             <div className="flex flex-col gap-2 items-center">
@@ -159,6 +185,7 @@ function HotelForm() {
           Register
         </button>
       </div>
+      <ToastContainer/>
     </div>
   );
 }

@@ -6,17 +6,33 @@ import Image from "next/image";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Dialog } from "@headlessui/react";
+import Block from "../components/block/block";
 export default function ChangeModePage() {
   const [activeTab, setActiveTab] = useState("users");
   const [users, setUsers] = useState<User[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState<User | null>(null);
 
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [loadingAnn, setLoadingAnn] = useState(false);
+  const [annToDelete, setAnnToDelete] = useState<Announcement | null>(null);
+
   type User = {
     id: number | string;
     name: string;
     surname: string;
     email: string;
+  };
+
+  type Announcement = {
+    id: number;
+    name: string;
+    number: string | null;
+    location: string | null;
+    info: string | null;
+    type: "room" | "hotel" | "other";
+    flavors: string[];
+    images?: string[];
   };
 
   useEffect(() => {
@@ -30,6 +46,28 @@ export default function ChangeModePage() {
         });
     }
   }, [activeTab]);
+
+  useEffect(() => {
+    if (activeTab === "announcements") {
+      setLoadingAnn(true);
+      fetch("/api/objects")
+        .then((r) =>
+          r.ok ? r.json() : Promise.reject("Failed to load announcements")
+        )
+        .then((data) =>
+          setAnnouncements(Array.isArray(data?.items) ? data.items : [])
+        )
+        .catch((err) => {
+          setAnnouncements([]);
+          toast.error(String(err));
+        })
+        .finally(() => setLoadingAnn(false));
+    }
+  }, [activeTab]);
+
+  useEffect(() => {
+    if (activeTab === "announcements") fetch("/api/objects");
+  });
 
   const handleDelete = async () => {
     if (!userToDelete) return;
@@ -50,6 +88,21 @@ export default function ChangeModePage() {
     }
   };
 
+  const handleDeleteAnnouncement = async () => {
+    if (!annToDelete) return;
+    try {
+      const res = await fetch(`/api/objects?id=${annToDelete.id}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) throw new Error("Failed to delete announcement");
+      setAnnouncements((prev) => prev.filter((a) => a.id !== annToDelete.id));
+      toast.success("Announcement deleted");
+    } catch (err) {
+      toast.error(String(err));
+    } finally {
+      setAnnToDelete(null);
+    }
+  };
   return (
     <div>
       <Navbar />
@@ -76,7 +129,7 @@ export default function ChangeModePage() {
           {activeTab === "users" && (
             <div>
               <p className="text-xl">List Users</p>
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-4 pt-4">
                 {users.map((user) => (
                   <div
                     key={user.id}
@@ -116,7 +169,23 @@ export default function ChangeModePage() {
           )}
           {activeTab === "announcements" && (
             <div>
-              <p>Anc</p>
+              <p className="text-xl">Users Announcements</p>
+              <div className="flex flex-col gap-4 pt-4">
+                <div className="grid md:grid-cols-2 gap-4 pt-4">
+                  {announcements.map((a) => (
+                    <Block
+                      key={a.id}
+                      isDeletemode
+                      discription={a.info || ""}
+                      title={a.name}
+                      tags={a.flavors || []}
+                      image={a.images?.[0]}
+                      onDelete={() => setAnnToDelete(a)}
+                      imgWidth={"w-36"}
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
           )}
         </div>
@@ -148,6 +217,21 @@ export default function ChangeModePage() {
               className="px-4 py-2 rounded-full bg-red-500 text-white hover:bg-red-600 transition"
               onClick={handleDelete}
             >
+              Delete
+            </button>
+          </div>
+        </div>
+      </Dialog>
+       <Dialog open={!!annToDelete} onClose={() => setAnnToDelete(null)} className="fixed z-50 inset-0 flex items-center justify-center">
+        <div className="fixed inset-0 bg-black/40" aria-hidden="true" />
+        <div className="relative bg-white p-6 rounded-xl w-[400px] mx-auto shadow-lg z-50 flex justify-center items-center flex-col">
+          <Dialog.Title className="text-xl font-bold mb-4">Delete Announcement</Dialog.Title>
+          <p className="mb-6 text-gray-700 ">Delete this ad?</p>
+          <div className="flex justify-center gap-3">
+            <button className="px-4 py-2 rounded-full text-white bg-blue-500 hover:bg-blue-700" onClick={() => setAnnToDelete(null)}>
+              Cancel
+            </button>
+            <button className="px-4 py-2 rounded-full bg-red-500 text-white hover:bg-red-600" onClick={handleDeleteAnnouncement}>
               Delete
             </button>
           </div>
